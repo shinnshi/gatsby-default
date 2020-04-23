@@ -1,21 +1,53 @@
 import React from "react"
-import { Link } from "gatsby"
-
+import { graphql, useStaticQuery } from "gatsby"
 import Layout from "../components/layout"
-import Image from "../components/image"
-import SEO from "../components/seo"
+import { Container, Row, Col } from 'react-bootstrap'
+import Kv from "../components/kv"
+import BlogItem from "../components/blogitem"
+const IndexPage = () => {
+  const data = useStaticQuery(
+    graphql`
+    query  {
+      allMarkdownRemark{
+        edges {
+          node{
+            frontmatter{
+              date
+              title
+              thumbnail  {
+                name
+                childImageSharp{
+                  fluid{
+                    src
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+    `)
 
-const IndexPage = () => (
-  <Layout>
-    <SEO title="Home" />
-    <h1>Hi people</h1>
-    <p>Welcome to your new Gatsby site.</p>
-    <p>Now go build something great.</p>
-    <div style={{ maxWidth: `300px`, marginBottom: `1.45rem` }}>
-      <Image />
-    </div>
-    <Link to="/page-2/">Go to page 2</Link>
-  </Layout>
-)
+  return (
+    <Layout>
+      <Kv />
+      <Container>
+        <Row>
+          {
+            data.allMarkdownRemark.edges.map((edge, index) => {
+              return <Col sm={4} key={index} >
+                <BlogItem
+                  title={edge.node.frontmatter.title}
+                  date={edge.node.frontmatter.date}
+                  src={edge.node.frontmatter.thumbnail.childImageSharp.fluid.src} />
+              </Col>
+            })
+          }
+        </Row>
+      </Container>
+    </Layout>
+  )
+}
 
 export default IndexPage
