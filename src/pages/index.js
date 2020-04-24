@@ -31,7 +31,6 @@ const IndexPage = () => {
       }
     }
     `)
-  console.log({ data })
   return (
     <Layout>
       <Kv />
@@ -45,7 +44,7 @@ const IndexPage = () => {
                   title={node.frontmatter.title}
                   date={node.frontmatter.date}
                   src={node.frontmatter.thumbnail.childImageSharp.fluid.src}
-                  link={edge.node.fields.slug}
+                  link={`/blog/${edge.node.fields.slug}`}
                 />
               </Col>
             })
